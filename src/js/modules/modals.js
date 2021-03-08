@@ -17,16 +17,18 @@ const modals = () => {
             });
         });
 
-        // Закрытие модального окна на крестик
-        close.addEventListener('click', () => {
-            modal.style.display = 'none';
-            document.body.style.overflow = '';
-        });
+        // // Закрытие модального окна на крестик
+        // close.addEventListener('click', () => {
+        //     modal.style.display = 'none';
+        //     document.body.style.overflow = '';
+        // });
 
-        // Закрытие модального окна на подложку
-        modal.addEventListener('click', () => {
-            modal.style.display = 'none';
-            document.body.style.overflow = '';
+        // Закрытие модального окна на подложку и крестик
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal || e.target === close || e.target === close.firstChild) {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
         });
     }
 
@@ -40,6 +42,7 @@ const modals = () => {
 
     bindModal('.popup_engineer_btn', '.popup_engineer', '.popup_engineer .popup_close');
     bindModal('.phone_link', '.popup', '.popup .popup_close');
+    bindModal('.popup_calc_btn', '.popup_calc', '.popup_calc_close');
     showModalByTime('.popup', 60000);
 
 };
