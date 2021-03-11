@@ -1,7 +1,8 @@
-const forms = () => {
+import checkNumInputs from "./checkNumInputs";
+
+const forms = (state) => {
     const forms = document.querySelectorAll('form'),
         inputs = document.querySelectorAll('input'),
-        phoneInputs = document.querySelectorAll('input[name="user_phone"]'),
         message = {
             loading: 'Загрузка...',
             success: 'Спасибо! Скоро мы с вами свяжемся',
@@ -26,11 +27,7 @@ const forms = () => {
     };
 
     // Функция запрета ввода букв и пробелов в инпут для телефона
-    phoneInputs.forEach((item) => {
-        item.addEventListener('input', () => {
-            item.value = item.value.replace(/[a-zA-Zа-яА-Я ]/, '');
-        });
-    });
+    checkNumInputs('input[name="user_phone"]');
 
     // Создание оповещения пользователя при отправке формы и отмена перезагрузки страницы
     forms.forEach(item => {
@@ -43,6 +40,11 @@ const forms = () => {
             item.appendChild(statusMessage);
 
             const formData = new FormData(item);
+            if (item.getAttribute('data-calc') === 'end') {
+                for (let key in state) { //^ Перебираем ключи в modalState
+                    formData.append(key, state[key]); //^ Добавляем ключ и значение в форму из modalState
+                }
+            }
 
             postData('assets/server.php', formData)
                 .then(res => {
